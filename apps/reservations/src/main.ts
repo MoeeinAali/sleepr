@@ -1,9 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { ReservationsModule } from './reservations.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
+import { Logger as PinoLogger } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(ReservationsModule);
+  app.useGlobalPipes(
+    new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
+  );
+  app.useLogger(app.get(PinoLogger));
 
   const config = new DocumentBuilder()
     .setTitle('Reservations API')

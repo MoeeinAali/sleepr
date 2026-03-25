@@ -1,6 +1,6 @@
 import { Model, Types, QueryFilter, UpdateQuery } from 'mongoose';
 import { AbstractDocument } from './abstract.schema';
-import { Logger } from '@nestjs/common';
+import { Logger, NotFoundException } from '@nestjs/common';
 
 export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   protected abstract readonly logger: Logger;
@@ -20,7 +20,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
       this.logger.warn(
         `Document not found with filter: ${JSON.stringify(queryFilter)}`,
       );
-      throw new Error('Document not found');
+      throw new NotFoundException('Document not found');
     }
     return document;
   }
@@ -30,7 +30,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     update: UpdateQuery<TDocument>,
   ): Promise<TDocument> {
     const document = await this.model
-      .findOneAndUpdate(queryFilter, update, { new: true })
+      .findOneAndUpdate(queryFilter, update, { after: true })
       .lean<TDocument>();
     if (!document) {
       this.logger.warn(
@@ -55,7 +55,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
       this.logger.warn(
         `Document not found with filter: ${JSON.stringify(queryFilter)}`,
       );
-      throw new Error('Document not found');
+      throw new NotFoundException('Document not found');
     }
     return document;
   }
