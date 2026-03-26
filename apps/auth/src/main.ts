@@ -10,7 +10,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
   const configService = app.get(ConfigService);
 
-  app.connectMicroservice({ transport: Transport.TCP });
+  app.connectMicroservice({
+    transport: Transport.TCP,
+    options: {
+      host: '0.0.0.0',
+      port: configService.get<number>('TCP_PORT') || 3002,
+    },
+  });
 
   app.use(cookieParser());
 
@@ -27,6 +33,6 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   await app.startAllMicroservices();
-  await app.listen(configService.get<number>('PORT') || 3001);
+  await app.listen(configService.get<number>('HTTP_PORT') || 3001);
 }
 bootstrap();

@@ -1,27 +1,41 @@
-import { CanActivate, ExecutionContext, Inject } from '@nestjs/common';
-import { map, Observable, tap } from 'rxjs';
+import {
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { AUTH_SERVICE } from '../constants/services';
 import { ClientProxy } from '@nestjs/microservices';
 import { AUTHENTICATE_PATTERN } from '../constants/patterns';
+
 export class JwtAuthGuard implements CanActivate {
   constructor(@Inject(AUTH_SERVICE) private readonly authClient: ClientProxy) {}
 
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const jwt = context.switchToHttp().getRequest().cookies?.Authentication;
+    const request = context.switchToHttp().getRequest();
+    const jwt = request.cookies?.Authentication;
+
     if (!jwt) {
-      return false;
+      throw new UnauthorizedException();
     }
+
     return this.authClient
       .send(AUTHENTICATE_PATTERN, {
         Authentication: jwt,
       })
       .pipe(
         tap((response) => {
-          context.switchToHttp().getRequest().user = response;
+          if (!response) {
+            throw new UnauthorizedException();
+          }
+
+          request.user = response;
         }),
         map(() => true),
+        catchError(() => throwError(() => new UnauthorizedException())),
       );
   }
 }
