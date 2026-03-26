@@ -9,6 +9,8 @@ import {
 } from './models/reservation.schema';
 import { ConfigModule } from '@nestjs/config';
 import Joi from 'joi';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { AUTH_SERVICE } from '@sleepr/common/constants';
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import Joi from 'joi';
         PORT: Joi.string().required(),
       }),
     }),
+    ClientsModule.register([{ name: AUTH_SERVICE, transport: Transport.TCP }]),
   ],
   controllers: [ReservationsController],
   providers: [ReservationsService, ReservationsRepository],

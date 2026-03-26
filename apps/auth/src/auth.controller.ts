@@ -5,6 +5,10 @@ import { CurrentUser } from './current-user.decorator';
 import { UserDocument } from './users/models/user.schema';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
+import { MessagePattern } from '@nestjs/microservices';
+import { AUTH_SERVICE } from '@sleepr/common/constants/services';
+import { JwtAuthGuard } from '@sleepr/common';
+import { AUTHENTICATE_PATTERN } from '@sleepr/common/constants/patterns';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -25,4 +29,8 @@ export class AuthController {
     this.authService.login(user, res);
     return user;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @MessagePattern(AUTHENTICATE_PATTERN)
+  async authenticate(data: { token: string }) {}
 }
