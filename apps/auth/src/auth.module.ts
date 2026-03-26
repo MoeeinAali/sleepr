@@ -22,7 +22,7 @@ import Joi from 'joi';
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: `${Number(configService.get<string>('JWT_EXPIRATION'))}s`,
+          expiresIn: `${Number(configService.get<number>('JWT_EXPIRATION'))}s`,
         },
       }),
       inject: [ConfigService],
