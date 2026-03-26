@@ -21,7 +21,6 @@ import { LocalStrategy } from './strategies/local.strategy';
         PORT: Joi.string().required(),
       }),
     }),
-    JwtModule,
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),

@@ -22,7 +22,7 @@ export class AuthService {
     const token = this.jwtService.sign(tokenPayload);
     response.cookie('Authentication', token, {
       httpOnly: true,
-      secure: true,
+      sameSite: 'lax',
       expires,
     });
   }
