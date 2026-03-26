@@ -22,8 +22,12 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@sleepr/common": ["libs/common/src"],
-      "@sleepr/common/*": ["libs/common/src/*"]
+      "@sleepr/common": [
+        "libs/common/src"
+      ],
+      "@sleepr/common/*": [
+        "libs/common/src/*"
+      ]
     }
   }
 }
