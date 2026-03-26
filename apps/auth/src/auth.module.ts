@@ -3,6 +3,8 @@ import { UsersModule } from './users/users.module';
 import { LoggerModule } from '@sleepr/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
 import Joi from 'joi';
 
 @Module({
@@ -15,6 +17,7 @@ import Joi from 'joi';
         MONGODB_URI: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRATION: Joi.string().required(),
+        PORT: Joi.string().required(),
       }),
     }),
     JwtModule,
@@ -28,5 +31,7 @@ import Joi from 'joi';
       inject: [ConfigService],
     }),
   ],
+  controllers: [AuthController],
+  providers: [AuthService],
 })
 export class AuthModule {}

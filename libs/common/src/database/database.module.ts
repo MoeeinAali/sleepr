@@ -17,4 +17,3 @@ export class DatabaseModule {
     return MongooseModule.forFeature(models);
   }
 }
- 
