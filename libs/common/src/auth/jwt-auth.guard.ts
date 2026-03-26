@@ -8,6 +8,7 @@ import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { AUTH_SERVICE } from '../constants/services';
 import { ClientProxy } from '@nestjs/microservices';
 import { AUTHENTICATE_PATTERN } from '../constants/patterns';
+import { UserDto } from '../dto/user.dto';
 
 export class JwtAuthGuard implements CanActivate {
   constructor(@Inject(AUTH_SERVICE) private readonly authClient: ClientProxy) {}
@@ -23,7 +24,7 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     return this.authClient
-      .send(AUTHENTICATE_PATTERN, {
+      .send<UserDto>(AUTHENTICATE_PATTERN, {
         Authentication: jwt,
       })
       .pipe(

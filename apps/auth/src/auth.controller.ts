@@ -1,12 +1,12 @@
 import { Controller, Post, UseGuards, Res } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { CurrentUser } from './current-user.decorator';
 import { UserDocument } from './users/models/user.schema';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AUTHENTICATE_PATTERN } from '@sleepr/common/constants/patterns';
+import { CurrentUser } from '@sleepr/common';
 
 @ApiTags('auth')
 @Controller('auth')
