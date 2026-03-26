@@ -1,17 +1,31 @@
 services:
-  # reservation:
-  #   container_name: sleepr-reservation
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/reservations/Dockerfile
-  #     target: development
-  #   command: pnpm run start:dev reservations
-  #   ports:
-  #     - '3000:3000'
-  #   volumes:
-  #     - .:/usr/src/app
-  #   env_file:
-  #     - .env
+  reservation:
+    container_name: sleepr-reservation
+    build:
+      context: .
+      dockerfile: ./apps/reservations/Dockerfile
+      target: development
+    command: pnpm run start:dev reservations
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+
+  auth:
+    container_name: sleepr-auth
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: pnpm run start:dev auth
+    ports:
+      - '3001:3001'
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
 
   mongodb:
     container_name: sleepr-mongo
